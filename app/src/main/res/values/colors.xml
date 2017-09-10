@@ -3,4 +3,17 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="colorGrayText">#777777</color>
+    <color name="colorBlackText">#333333</color>
+    <color name="colorTextOnDarkBackground">#FFFFFF</color>
+
+
+    <color name="rippleColor">#777777</color>
+    <color name="rippleBackgroundColor">#fff</color>
+    <color name="colorBlack27">#43000000</color>
+
+
+    <color name="trans">#00000000</color>
 </resources>

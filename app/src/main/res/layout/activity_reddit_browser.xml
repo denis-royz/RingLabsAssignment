@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:id="@+id/lay_reddit_top"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_lay_feed_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:id="@+id/reddit_browser_recycler"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
+
+    <include layout="@layout/view_no_result"
+        android:id="@+id/lay_no_result"
+        android:visibility="gone"
+        />
+    <include layout="@layout/view_no_connection"
+        android:id="@+id/lay_no_connection"
+        android:visibility="gone"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/lay_loading"
+        android:clickable="true"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:scaleType="centerInside"
+            android:id="@+id/progress_image_view"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>
