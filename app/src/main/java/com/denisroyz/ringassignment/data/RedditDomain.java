@@ -2,9 +2,13 @@ package com.denisroyz.ringassignment.data;
 
 import android.util.Log;
 
+import com.denisroyz.ringassignment.RingAssignmentApplication;
+import com.denisroyz.ringassignment.di.AppComponent;
 import com.denisroyz.ringassignment.model.RedditResponse;
 import com.denisroyz.ringassignment.model.listeners.FailureListener;
 import com.denisroyz.ringassignment.model.listeners.SuccessListener;
+
+import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -22,10 +26,11 @@ public class RedditDomain {
 
     private final static String TAG = "RedditDomain";
 
-    private RedditApi redditApi;
+    @Inject
+    protected RedditApi redditApi;
 
-    public void loadPosts(final SuccessListener<RedditResponse> successListener, final FailureListener failureListener){
-        redditApi.getPosts(10, null).enqueue(new Callback<RedditResponse>() {
+    public void loadPosts(int number, String first, String last, final SuccessListener<RedditResponse> successListener, final FailureListener failureListener){
+        redditApi.getPosts(number, last).enqueue(new Callback<RedditResponse>() {
             @Override
             public void onResponse(Call<RedditResponse> call, Response<RedditResponse> response) {
                 Log.i(TAG, response.message());
@@ -40,24 +45,8 @@ public class RedditDomain {
         });
     }
 
-    public RedditDomain(){
-        inject();
+    public RedditDomain(AppComponent appComponent){
+        appComponent.inject(this);
     }
 
-    private void inject(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        httpClientBuilder.addInterceptor(logging);
-        OkHttpClient httpClient = httpClientBuilder.build();
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://reddit.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
-                .build();
-
-        redditApi = retrofit.create(RedditApi.class);
-    }
 }

@@ -1,33 +1,67 @@
 package com.denisroyz.ringassignment.ui.redditBrowser.recycler;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.denisroyz.ringassignment.R;
 import com.denisroyz.ringassignment.model.Child;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Heralt on 10.09.2017.
  */
 
-public class RedditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String TAG = "RedditRecyclerViewAdapter";
+    public static final String TAG = "RedditRecyclerAdapter";
 
     private static final int TYPE_FOOTER = 0;
     private static final int TYPE_ITEM = 1;
 
-    private List<Child> items;
-    private boolean footerViewEnabled = false;
+    private List<Child> items = new LinkedList<>();
+    private boolean footerViewEnabled = true;
+
+    private Picasso picasso;
+
+    public RedditRecyclerAdapter(Picasso picasso){
+        this.picasso = picasso;
+    }
+
 
     public void bind( List<Child> items){
         this.items = items;
         notifyDataSetChanged();
+        Log.i(TAG, String.format("%d items displayed", items.size()));
     }
+
+    public void insertToBottom(List<Child> items){
+        int start = this.items.size();
+        int count = items.size();
+        List<Child> newList = new ArrayList<>();
+        newList.addAll(this.items);
+        newList.addAll(items);
+        this.items = newList;
+        notifyItemRangeInserted(start, count);
+        Log.i(TAG, String.format("%d items inserted to bottom. New size: %d", items.size(), newList.size()));
+    }
+
+    public void insertToTheTop(List<Child> items){
+        List<Child> newList = new ArrayList<>();
+        newList.addAll(items);
+        newList.addAll(this.items);
+        this.items = newList;
+        notifyItemRangeInserted(0, items.size());
+        Log.i(TAG, String.format("%d items inserted to the top. New size: %d", items.size(), newList.size()));
+
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,8 +88,7 @@ public class RedditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     public void onBindViewHolder(RedditChildViewHolder holder, int position) {
         Child item = getItem(position);
-        holder.setTitleText(item.getData().getTitle());
-
+        holder.bind(item, picasso);
     }
 
     @Override
@@ -82,4 +115,5 @@ public class RedditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     public void setFooterViewEnabled(boolean footerViewEnabled) {
         this.footerViewEnabled = footerViewEnabled;
     }
+
 }

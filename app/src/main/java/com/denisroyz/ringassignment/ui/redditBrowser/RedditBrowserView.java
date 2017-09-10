@@ -7,10 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.denisroyz.ringassignment.R;
+import com.denisroyz.ringassignment.RingAssignmentApplication;
 import com.denisroyz.ringassignment.model.Child;
-import com.denisroyz.ringassignment.ui.redditBrowser.recycler.RedditRecyclerViewAdapter;
+import com.denisroyz.ringassignment.ui.base.EndlessRecyclerViewScrollListener;
+import com.denisroyz.ringassignment.ui.redditBrowser.recycler.RedditRecyclerAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,21 +41,35 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     @BindView(R.id.reddit_browser_recycler)
     RecyclerView redditTopRecyclerView;
 
+    @Inject
+    Picasso picasso;
 
-    private RedditRecyclerViewAdapter redditTopRecyclerAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private RedditRecyclerAdapter redditTopRecyclerAdapter;
+    private LinearLayoutManager layoutManager;
 
     private RedditBrowserPresenterContract redditBrowserPresenter;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public RedditBrowserView(Activity activity){
-        ButterKnife.bind(this, activity);
-        redditTopRecyclerAdapter = new RedditRecyclerViewAdapter();
+        injectUsing(activity);
+        redditTopRecyclerAdapter = new RedditRecyclerAdapter(picasso);
         layoutManager = new LinearLayoutManager(activity);
         redditTopRecyclerView.setLayoutManager(layoutManager);
         redditTopRecyclerView.setAdapter(redditTopRecyclerAdapter);
-        //redditTopRecyclerView.setHasFixedSize(true);
-
         swipeRefreshLayout.setOnRefreshListener(this::onSwipeRefreshLayoutSwiped);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                redditBrowserPresenter.loadItemsToTail();
+            }
+        };
+        redditTopRecyclerView.addOnScrollListener(scrollListener);
+
+    }
+    private void injectUsing(Activity activity){
+        ButterKnife.bind(this, activity);
+        ((RingAssignmentApplication)activity.getApplication()).getAppComponent().inject(this);
     }
 
     private void onSwipeRefreshLayoutSwiped() {
@@ -63,9 +82,25 @@ public class RedditBrowserView implements RedditBrowserViewContract{
 
     @Override
     public void displayRedditContent(List<Child> items) {
-
         redditTopRecyclerAdapter.bind(items);
     }
+    @Override
+    public void displayMoreRedditContentToTheBottom(List<Child> items) {
+        redditTopRecyclerAdapter.insertToBottom(items);
+
+    }
+
+    @Override
+    public void disableLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void setOverScrollEnabled(boolean enabled) {
+        redditTopRecyclerAdapter.setFooterViewEnabled(enabled);
+    }
+
+
 
     @Override
     public void showLoadingState() {

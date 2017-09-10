@@ -107,7 +107,7 @@ public class Data_ {
     private Boolean stickied;
     @SerializedName("created")
     @Expose
-    private Integer created;
+    private Long created;
     @SerializedName("url")
     @Expose
     private String url;
@@ -119,7 +119,7 @@ public class Data_ {
     private String title;
     @SerializedName("created_utc")
     @Expose
-    private Integer createdUtc;
+    private Long createdUtc;
     @SerializedName("ups")
     @Expose
     private Integer ups;
@@ -400,11 +400,11 @@ public class Data_ {
         this.stickied = stickied;
     }
 
-    public Integer getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Long created) {
         this.created = created;
     }
 
@@ -432,11 +432,11 @@ public class Data_ {
         this.title = title;
     }
 
-    public Integer getCreatedUtc() {
+    public Long getCreatedUtc() {
         return createdUtc;
     }
 
-    public void setCreatedUtc(Integer createdUtc) {
+    public void setCreatedUtc(Long createdUtc) {
         this.createdUtc = createdUtc;
     }
 

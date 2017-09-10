@@ -13,4 +13,5 @@ public interface RedditBrowserPresenterContract {
 
     void loadInitialContent();
 
+    void loadItemsToTail();
 }

@@ -21,4 +21,10 @@ public interface RedditBrowserViewContract {
     void setPresenter(RedditBrowserPresenterContract redditBrowserPresenter);
 
     void displayRedditContent(List<Child> items);
+
+    void disableLoading();
+
+    void setOverScrollEnabled(boolean enabled);
+
+    void displayMoreRedditContentToTheBottom(List<Child> items);
 }

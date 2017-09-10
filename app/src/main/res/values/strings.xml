@@ -6,4 +6,7 @@
     <string name="no_result">No result</string>
     <string name="no_result_desc">Reddit returned no result for this query</string>
     <string name="thumbnail">thumbnail</string>
+    <string name="comment_pattern">%d comment</string>
+    <string name="comments_pattern">%d comments</string>
+    <string name="entry_date_and_author_pattern" formatted="false">Submitted %s by %s</string>
 </resources>

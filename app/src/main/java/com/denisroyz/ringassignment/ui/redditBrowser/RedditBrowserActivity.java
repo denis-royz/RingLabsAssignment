@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.denisroyz.ringassignment.R;
+import com.denisroyz.ringassignment.RingAssignmentApplication;
+import com.denisroyz.ringassignment.di.AppComponent;
 
 public class RedditBrowserActivity extends AppCompatActivity {
 
@@ -16,8 +18,10 @@ public class RedditBrowserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reddit_browser);
+        AppComponent appComponent = ((RingAssignmentApplication)getApplication()).getAppComponent();
+        appComponent.inject(this);
         redditBrowserView = new RedditBrowserView(this);
-        redditBrowserPresenter = new RedditBrowserPresenter();
+        redditBrowserPresenter = new RedditBrowserPresenter(appComponent);
         init();
     }
 
