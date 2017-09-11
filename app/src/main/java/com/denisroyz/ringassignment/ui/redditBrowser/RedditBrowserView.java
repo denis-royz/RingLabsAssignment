@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.denisroyz.ringassignment.R;
@@ -26,6 +27,8 @@ import butterknife.OnClick;
  */
 
 public class RedditBrowserView implements RedditBrowserViewContract{
+
+    private static final String TAG = "RedditBrowserView";
 
     @BindView(R.id.lay_no_result)
     View viewNoResult;
@@ -73,7 +76,7 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     }
 
     private void onSwipeRefreshLayoutSwiped() {
-
+        redditBrowserPresenter.loadInitialContent();
     }
 
     public void setPresenter(RedditBrowserPresenterContract redditBrowserPresenter){
@@ -91,12 +94,14 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     }
 
     @Override
-    public void disableLoading() {
+    public void stopPullToRefresh() {
+        Log.i(TAG, "stopPullToRefresh");
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void setOverScrollEnabled(boolean enabled) {
+    public void setLoadingEnabled(boolean enabled) {
+        Log.i(TAG, String.format("setLoadingEnabled(%b)", enabled));
         redditTopRecyclerAdapter.setFooterViewEnabled(enabled);
     }
 
@@ -104,14 +109,16 @@ public class RedditBrowserView implements RedditBrowserViewContract{
 
     @Override
     public void showLoadingState() {
-        viewNoResult.setVisibility(View.GONE);
-        viewNoConnection.setVisibility(View.GONE);
+        Log.i(TAG, "showLoadingState");
+//        viewNoResult.setVisibility(View.GONE);
+//        viewNoConnection.setVisibility(View.GONE);
         viewLoadingInProgress.setVisibility(View.VISIBLE);
-        viewRedditRecyclerContainer.setVisibility(View.GONE);
+//        viewRedditRecyclerContainer.setVisibility(View.GONE);
     }
 
     @Override
     public void showNoInternetState() {
+        Log.i(TAG, "showNoInternetState");
         viewNoResult.setVisibility(View.GONE);
         viewNoConnection.setVisibility(View.VISIBLE);
         viewLoadingInProgress.setVisibility(View.GONE);
@@ -120,6 +127,7 @@ public class RedditBrowserView implements RedditBrowserViewContract{
 
     @Override
     public void showNoContentState() {
+        Log.i(TAG, "showNoContentState");
         viewNoResult.setVisibility(View.VISIBLE);
         viewNoConnection.setVisibility(View.GONE);
         viewLoadingInProgress.setVisibility(View.GONE);
@@ -128,6 +136,7 @@ public class RedditBrowserView implements RedditBrowserViewContract{
 
     @Override
     public void showContentState() {
+        Log.i(TAG, "showContentState");
         viewNoResult.setVisibility(View.GONE);
         viewNoConnection.setVisibility(View.GONE);
         viewLoadingInProgress.setVisibility(View.GONE);

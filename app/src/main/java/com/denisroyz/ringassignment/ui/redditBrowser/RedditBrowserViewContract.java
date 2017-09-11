@@ -22,9 +22,9 @@ public interface RedditBrowserViewContract {
 
     void displayRedditContent(List<Child> items);
 
-    void disableLoading();
+    void stopPullToRefresh();
 
-    void setOverScrollEnabled(boolean enabled);
+    void setLoadingEnabled(boolean enabled);
 
     void displayMoreRedditContentToTheBottom(List<Child> items);
 }

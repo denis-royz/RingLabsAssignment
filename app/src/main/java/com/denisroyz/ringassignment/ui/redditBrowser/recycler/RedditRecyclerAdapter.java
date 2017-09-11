@@ -48,7 +48,7 @@ public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         newList.addAll(this.items);
         newList.addAll(items);
         this.items = newList;
-        notifyItemRangeInserted(start, count);
+        notifyItemRangeInserted(start, count-1);
         Log.i(TAG, String.format("%d items inserted to bottom. New size: %d", items.size(), newList.size()));
     }
 
@@ -57,7 +57,7 @@ public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         newList.addAll(items);
         newList.addAll(this.items);
         this.items = newList;
-        notifyItemRangeInserted(0, items.size());
+        notifyItemRangeInserted(0, items.size()-1);
         Log.i(TAG, String.format("%d items inserted to the top. New size: %d", items.size(), newList.size()));
 
     }
