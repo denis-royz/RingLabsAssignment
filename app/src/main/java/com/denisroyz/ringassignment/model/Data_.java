@@ -136,6 +136,9 @@ public class Data_ {
     @Expose
     private Object distinguished;
 
+    @SerializedName("preview")
+    @Expose
+    private Preview preview;
     public String getDomain() {
         return domain;
     }
@@ -340,6 +343,14 @@ public class Data_ {
         return authorFlairCssClass;
     }
 
+
+    public Preview getPreview() {
+        return preview;
+    }
+
+    public void setPreview(Preview preview) {
+        this.preview = preview;
+    }
     public void setAuthorFlairCssClass(Object authorFlairCssClass) {
         this.authorFlairCssClass = authorFlairCssClass;
     }

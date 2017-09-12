@@ -27,4 +27,8 @@ public interface RedditBrowserViewContract {
     void setLoadingEnabled(boolean enabled);
 
     void displayMoreRedditContentToTheBottom(List<Child> items);
+
+    void notifyCanNotLoadFullSizeImage();
+
+    void notifyDownloadComplete(String title, String uri);
 }

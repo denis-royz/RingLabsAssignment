@@ -2,18 +2,23 @@ package com.denisroyz.ringassignment.ui.redditBrowser;
 
 import android.util.Log;
 
+import com.denisroyz.ringassignment.data.DownloaderComponent;
+import com.denisroyz.ringassignment.data.DownloaderComponentListener;
 import com.denisroyz.ringassignment.data.RedditDomain;
 import com.denisroyz.ringassignment.di.AppComponent;
 import com.denisroyz.ringassignment.model.Child;
 import com.denisroyz.ringassignment.model.Data;
+import com.denisroyz.ringassignment.model.Image;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Heralt on 10.09.2017.
  */
 
-public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
+public class RedditBrowserPresenter implements RedditBrowserPresenterContract, DownloaderComponentListener {
 
     private static final String TAG = "RedditBrowserPresenter";
 
@@ -21,10 +26,13 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
     private static final int MAX_POSTS_TO_DISPLAY   = 50;
 
     private RedditBrowserViewContract view;
-
+    private RedditActivityContract redditActivityContract;
     private RedditDomain redditDomain;
 
+    private boolean stateAttached = false;
+
     public RedditBrowserPresenter(AppComponent appComponent){
+        appComponent.inject(this);
         redditDomain = new RedditDomain(appComponent);
     }
 
@@ -32,6 +40,9 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
     private int loadedCount;
     private boolean initialized = false;
     private boolean loadMoreAfterInitialization = false;
+
+    @Inject
+    protected DownloaderComponent downloaderComponent;
 
     public void loadInitialContent() {
         Log.i(TAG, "loadInitialContent");
@@ -41,6 +52,10 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
         view.setLoadingEnabled(false);
         redditDomain.loadPosts(POSTS_IN_PAGE, null, null,
                 response -> {
+                    if (!isAttached()){
+                        Log.i(TAG, "loadItemsToTail.IgnoreResult.Reason: State detached");
+                        return;
+                    }
                     Data data = response.getData();
                     if (data!=null&&data.getChildren()!=null&&data.getChildren().size()>0){
                         List<Child> items = data.getChildren();
@@ -81,12 +96,16 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
         Log.i(TAG, "loadItemsToTail.Started");
         redditDomain.loadPosts(postsToLoad, null, after,
                 response -> {
+                    if (!isAttached()){
+                        Log.i(TAG, "loadItemsToTail.IgnoreResult.Reason: State detached");
+                        return;
+                    }
                     Data data = response.getData();
                     if (data!=null&&data.getChildren()!=null&&data.getChildren().size()>0){
                         Log.i(TAG, "loadItemsToTail.Success");
                         List<Child> items = data.getChildren();
                         loadedCount+=items.size();
-                        after = data.getAfter();
+                        this.after = data.getAfter();
                         view.displayMoreRedditContentToTheBottom(items);
                         view.stopPullToRefresh();
                         if (loadedCount>=MAX_POSTS_TO_DISPLAY){
@@ -107,15 +126,53 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
         );
     }
 
+    @Override
+    public void showInGallery(String uri) {
+        if (!isAttached()){
+            Log.i(TAG, "showInGallery.Rejected.Reason: State detached");
+            return;
+        }
+        redditActivityContract.showInGallery(uri);
+    }
+
+    @Override
+    public void downloadFullSize(Child child) {
+        List<Image> images = child.getData().getPreview().getImages();
+        String url = null;
+        if (images.size()>0){
+            url = images.get(0).getSource().getUrl();
+        }
+        if (url!=null){
+            downloaderComponent.download(child.getData().getTitle(), url);
+        } else {
+            view.notifyCanNotLoadFullSizeImage();
+        }
+    }
+
+    @Override
+    public void onDownloadComplete(String title, String uri) {
+        view.notifyDownloadComplete(title, uri);
+
+    }
+    @Override
+    public void notifyDownloadComplete() {
+    }
+
+    private boolean isAttached(){
+        return stateAttached;
+    }
 
     @Override
     public void subscribe() {
+        this.stateAttached = true;
+        downloaderComponent.registerDownloaderComponentListener(this);
 
     }
 
     @Override
     public void unSubscribe() {
-
+        this.stateAttached = false;
+        downloaderComponent.unRegisterDownloaderComponentListener(this);
     }
 
     @Override
@@ -123,4 +180,10 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract{
         this.view = view;
 
     }
+
+    @Override
+    public void setRedditActivityContract(RedditActivityContract redditActivityContract) {
+        this.redditActivityContract = redditActivityContract;
+    }
+
 }

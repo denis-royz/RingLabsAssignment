@@ -1,6 +1,7 @@
 package com.denisroyz.ringassignment.ui.redditBrowser;
 
 import android.app.Activity;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +69,11 @@ public class RedditBrowserView implements RedditBrowserViewContract{
             }
         };
         redditTopRecyclerView.addOnScrollListener(scrollListener);
+        redditTopRecyclerAdapter.setOnItemActionListener(this::onRecyclerItemActionCalled);
+    }
 
+    private void onRecyclerItemActionCalled(Child child){
+        redditBrowserPresenter.downloadFullSize(child);
     }
     private void injectUsing(Activity activity){
         ButterKnife.bind(this, activity);
@@ -94,6 +99,23 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     }
 
     @Override
+    public void notifyCanNotLoadFullSizeImage() {
+        Snackbar
+                .make(redditTopRecyclerView, R.string.can_not_load_fullsize_image, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void notifyDownloadComplete(String title, String uri) {
+        String message = String.format(redditTopRecyclerView.getContext().getText(R.string.download_complete).toString(), title);
+        Snackbar snackBar = Snackbar
+                .make(redditTopRecyclerView, message, Snackbar.LENGTH_SHORT);
+        snackBar.setAction("Show", v -> redditBrowserPresenter.showInGallery(uri));
+        snackBar.show();
+
+    }
+
+    @Override
     public void stopPullToRefresh() {
         Log.i(TAG, "stopPullToRefresh");
         swipeRefreshLayout.setRefreshing(false);
@@ -110,10 +132,7 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     @Override
     public void showLoadingState() {
         Log.i(TAG, "showLoadingState");
-//        viewNoResult.setVisibility(View.GONE);
-//        viewNoConnection.setVisibility(View.GONE);
         viewLoadingInProgress.setVisibility(View.VISIBLE);
-//        viewRedditRecyclerContainer.setVisibility(View.GONE);
     }
 
     @Override

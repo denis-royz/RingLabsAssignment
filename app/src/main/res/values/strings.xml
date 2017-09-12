@@ -9,4 +9,6 @@
     <string name="comment_pattern">%d comment</string>
     <string name="comments_pattern">%d comments</string>
     <string name="entry_date_and_author_pattern" formatted="false">Submitted %s by %s</string>
+    <string name="can_not_load_fullsize_image">Can not load fullsize image</string>
+    <string name="download_complete">Download finished</string>
 </resources>

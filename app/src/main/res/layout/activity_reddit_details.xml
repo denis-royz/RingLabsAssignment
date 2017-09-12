@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.denisroyz.ringassignment.ui.redditDetails.RedditDetailsActivity">
+
+    <ImageView
+        android:id="@+id/lay_full_size_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <include layout="@layout/view_no_result"
+        android:id="@+id/lay_no_result"
+        android:visibility="gone"
+        />
+    <include layout="@layout/view_no_connection"
+        android:id="@+id/lay_no_connection"
+        android:visibility="gone"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/lay_loading"
+        android:clickable="true"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:scaleType="centerInside"
+            android:id="@+id/progress_image_view"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>

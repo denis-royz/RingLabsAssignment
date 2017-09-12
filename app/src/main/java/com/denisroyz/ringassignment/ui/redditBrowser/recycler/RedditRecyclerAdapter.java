@@ -89,6 +89,12 @@ public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RedditChildViewHolder holder, int position) {
         Child item = getItem(position);
         holder.bind(item, picasso);
+        holder.thumbnailImageView.setOnClickListener(view -> {
+
+            if (listener!=null){
+                listener.onItemAction(items.get(position));
+            }
+        });
     }
 
     @Override
@@ -116,4 +122,8 @@ public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.footerViewEnabled = footerViewEnabled;
     }
 
+    private OnItemActionListener listener;
+    public void setOnItemActionListener(OnItemActionListener listener) {
+        this.listener = listener;
+    }
 }
