@@ -8,10 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/view_card"
-        android:clickable="true"
         android:layout_marginLeft="-1dp"
-        android:layout_marginRight="-1dp"
-        android:foreground="@drawable/ripple_bordered">
+        android:layout_marginRight="-1dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:padding="8dp"
@@ -40,6 +38,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_width="@dimen/reddit_thumbnail_size"
+                android:foreground="@drawable/ripple_bordered"
                 android:layout_height="@dimen/reddit_thumbnail_size"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_broken_image_black_24dp"

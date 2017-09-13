@@ -9,6 +9,7 @@ import com.denisroyz.ringassignment.data.RedditDomainImpl;
 import com.denisroyz.ringassignment.model.Child;
 import com.denisroyz.ringassignment.model.Data;
 import com.denisroyz.ringassignment.model.Image;
+import com.denisroyz.ringassignment.model.Preview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +141,9 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
             view.requestWriteExternalStoragePermission();
             return;
         }
-        List<Image> images = child.getData().getPreview().getImages();
+        Preview preview = child.getData().getPreview();
+        if (preview==null) return;
+        List<Image> images = preview.getImages();
         String url = null;
         if (images.size()>0){
             url = images.get(0).getSource().getUrl();

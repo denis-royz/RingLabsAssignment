@@ -42,10 +42,14 @@ public class RedditChildViewHolder extends RecyclerView.ViewHolder {
         titleTextView.setText(item.getData().getTitle());
         commentsNumberTextView.setText(formatCommentsNumber(item.getData().getNumComments()));
         entryDateAndAuthorTextView.setText(formatEntryDateAndAuthor(item.getData().getCreatedUtc(),item.getData().getAuthor()));
-        picasso .load(item.getData().getUrl())
+        String thumbnail = item.getData().getThumbnail();
+        picasso .load(thumbnail)
+                .placeholder(R.drawable.ic_photo_48dp)
+                .error(R.drawable.ic_photo_48dp)
                 .centerCrop()
                 .fit()
                 .into(thumbnailImageView);
+        thumbnailImageView.setEnabled(!thumbnail.equalsIgnoreCase("default"));
     }
 
     private String formatEntryDateAndAuthor(Long entryDate, String author){

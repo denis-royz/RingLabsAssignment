@@ -90,7 +90,6 @@ public class RedditRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Child item = getItem(position);
         holder.bind(item, picasso);
         holder.thumbnailImageView.setOnClickListener(view -> {
-
             if (listener!=null){
                 listener.onItemAction(items.get(position));
             }
