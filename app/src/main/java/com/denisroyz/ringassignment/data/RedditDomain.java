@@ -26,8 +26,11 @@ public class RedditDomain {
 
     private final static String TAG = "RedditDomain";
 
-    @Inject
     protected RedditApi redditApi;
+
+    public RedditDomain(RedditApi redditApi){
+        this.redditApi = redditApi;
+    }
 
     public void loadPosts(int number, String first, String last, final SuccessListener<RedditResponse> successListener, final FailureListener failureListener){
         redditApi.getPosts(number, last).enqueue(new Callback<RedditResponse>() {
@@ -45,8 +48,5 @@ public class RedditDomain {
         });
     }
 
-    public RedditDomain(AppComponent appComponent){
-        appComponent.inject(this);
-    }
 
 }

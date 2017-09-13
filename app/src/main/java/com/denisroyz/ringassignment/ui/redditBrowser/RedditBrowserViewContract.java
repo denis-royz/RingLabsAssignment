@@ -1,5 +1,7 @@
 package com.denisroyz.ringassignment.ui.redditBrowser;
 
+import android.os.Parcelable;
+
 import com.denisroyz.ringassignment.model.Child;
 
 import java.util.List;
@@ -33,4 +35,10 @@ public interface RedditBrowserViewContract {
     void notifyDownloadComplete(String title, String uri, String type);
 
     void requestWriteExternalStoragePermission();
+
+    Parcelable getInstanceScrollPosition();
+
+    void setInstanceScrollPosition(Parcelable listState);
+
+    void restoreStateAfterResume();
 }

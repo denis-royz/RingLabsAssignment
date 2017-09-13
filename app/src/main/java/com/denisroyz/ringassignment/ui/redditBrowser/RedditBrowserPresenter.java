@@ -10,6 +10,7 @@ import com.denisroyz.ringassignment.model.Child;
 import com.denisroyz.ringassignment.model.Data;
 import com.denisroyz.ringassignment.model.Image;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,12 +29,13 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
     private RedditBrowserViewContract view;
     private RedditActivityContract redditActivityContract;
     private RedditDomain redditDomain;
+    private DownloaderComponent downloaderComponent;
 
     private boolean stateAttached = false;
 
-    public RedditBrowserPresenter(AppComponent appComponent){
-        appComponent.inject(this);
-        redditDomain = new RedditDomain(appComponent);
+    public RedditBrowserPresenter(DownloaderComponent downloaderComponent, RedditDomain redditDomain){
+        this.downloaderComponent = downloaderComponent;
+        this.redditDomain = redditDomain;
     }
 
     private String after;
@@ -41,8 +43,6 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
     private boolean initialized = false;
     private boolean loadMoreAfterInitialization = false;
 
-    @Inject
-    protected DownloaderComponent downloaderComponent;
 
     public void loadInitialContent() {
         Log.i(TAG, "loadInitialContent");
@@ -60,11 +60,14 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
                     if (data!=null&&data.getChildren()!=null&&data.getChildren().size()>0){
                         List<Child> items = data.getChildren();
                         after = data.getAfter();
+                        clearCache();
+                        cache(items);
                         loadedCount=items.size();
                         view.displayRedditContent(items);
                         view.showContentState();
                         view.setLoadingEnabled(true);
                         view.stopPullToRefresh();
+
                         initialized = true;
                         if (loadMoreAfterInitialization){
                             loadItemsToTail();
@@ -96,15 +99,12 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
         Log.i(TAG, "loadItemsToTail.Started");
         redditDomain.loadPosts(postsToLoad, null, after,
                 response -> {
-                    if (!isAttached()){
-                        Log.i(TAG, "loadItemsToTail.IgnoreResult.Reason: State detached");
-                        return;
-                    }
                     Data data = response.getData();
                     if (data!=null&&data.getChildren()!=null&&data.getChildren().size()>0){
                         Log.i(TAG, "loadItemsToTail.Success");
                         List<Child> items = data.getChildren();
                         loadedCount+=items.size();
+                        cache(items);
                         this.after = data.getAfter();
                         view.displayMoreRedditContentToTheBottom(items);
                         view.stopPullToRefresh();
@@ -202,4 +202,21 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
         this.redditActivityContract = redditActivityContract;
     }
 
+    private List<Child> cache = new ArrayList<>();
+
+    private void cache(List<Child> items){
+        cache.addAll(items);
+
+    }
+
+    private void clearCache(){
+        cache.clear();
+    }
+
+    public void restoreCache(){
+        view.displayRedditContent(cache);
+        view.showContentState();
+        view.setLoadingEnabled(true);
+        view.stopPullToRefresh();
+    }
 }

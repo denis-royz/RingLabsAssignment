@@ -1,6 +1,7 @@
 package com.denisroyz.ringassignment.ui.redditBrowser;
 
 import android.app.Activity;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -122,6 +123,23 @@ public class RedditBrowserView implements RedditBrowserViewContract{
         snackBar.setAction("Give permission", v -> redditBrowserPresenter.requestPermissionWriteExternalStorage());
         snackBar.show();
 
+    }
+
+    @Override
+    public Parcelable getInstanceScrollPosition() {
+         return layoutManager.onSaveInstanceState();
+    }
+
+    private Parcelable mListState;
+
+    @Override
+    public void setInstanceScrollPosition(Parcelable listState) {
+        mListState = listState;
+    }
+
+    @Override
+    public void restoreStateAfterResume() {
+        layoutManager.onRestoreInstanceState(mListState);
     }
 
     @Override

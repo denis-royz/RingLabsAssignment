@@ -7,6 +7,9 @@ import com.denisroyz.ringassignment.RingAssignmentApplication;
 import com.denisroyz.ringassignment.data.DownloaderComponent;
 import com.denisroyz.ringassignment.data.PermissionManager;
 import com.denisroyz.ringassignment.data.RedditApi;
+import com.denisroyz.ringassignment.data.RedditDomain;
+import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserPresenter;
+import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserPresenterContract;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
@@ -92,5 +95,16 @@ public class AppModule {
     @Singleton
     PermissionManager permissionManager(){
         return new PermissionManager();
+    }
+
+    @Provides
+    @Singleton
+    RedditBrowserPresenterContract redditBrowserPresenter(DownloaderComponent downloaderComponent, RedditDomain redditDomain){
+        return new RedditBrowserPresenter(downloaderComponent,  redditDomain);
+    }
+    @Provides
+    @Singleton
+    RedditDomain redditDomain(RedditApi redditApi){
+        return new RedditDomain(redditApi);
     }
 }

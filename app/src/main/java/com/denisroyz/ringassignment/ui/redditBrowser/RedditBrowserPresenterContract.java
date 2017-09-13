@@ -28,4 +28,6 @@ public interface RedditBrowserPresenterContract {
     void requestPermissionWriteExternalStorage();
 
     void onPermissionWriteExternalStorageGranted();
+
+    void restoreCache();
 }

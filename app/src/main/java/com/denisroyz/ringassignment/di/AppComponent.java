@@ -17,11 +17,8 @@ import dagger.Component;
 @Component(modules = AppModule.class)
 public interface AppComponent {
 
-    void inject(RedditBrowserPresenter redditBrowserPresenter);
-
     void inject(RedditBrowserView redditBrowserView);
 
     void inject(RedditBrowserActivity redditBrowserActivity);
 
-    void inject(RedditDomain redditDomain);
 }
