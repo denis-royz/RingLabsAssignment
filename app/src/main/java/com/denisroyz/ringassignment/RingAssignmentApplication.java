@@ -20,10 +20,14 @@ public class RingAssignmentApplication extends Application {
         initializeInjector();
     }
 
-    private void initializeInjector() {
+    void initializeInjector() {
         mAppComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
+                .appModule(getApplicationModule())
                 .build();
+    }
+
+    AppModule getApplicationModule(){
+        return new AppModule(this);
     }
 
     public AppComponent getAppComponent() {

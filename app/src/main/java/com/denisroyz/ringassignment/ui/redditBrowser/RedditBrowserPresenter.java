@@ -5,7 +5,7 @@ import android.util.Log;
 import com.denisroyz.ringassignment.data.DownloaderComponent;
 import com.denisroyz.ringassignment.data.DownloaderComponentListener;
 import com.denisroyz.ringassignment.data.RedditDomain;
-import com.denisroyz.ringassignment.di.AppComponent;
+import com.denisroyz.ringassignment.data.RedditDomainImpl;
 import com.denisroyz.ringassignment.model.Child;
 import com.denisroyz.ringassignment.model.Data;
 import com.denisroyz.ringassignment.model.Image;
@@ -13,7 +13,6 @@ import com.denisroyz.ringassignment.model.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 
 /**
  * Created by Heralt on 10.09.2017.

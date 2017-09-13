@@ -8,6 +8,7 @@ import com.denisroyz.ringassignment.data.DownloaderComponent;
 import com.denisroyz.ringassignment.data.PermissionManager;
 import com.denisroyz.ringassignment.data.RedditApi;
 import com.denisroyz.ringassignment.data.RedditDomain;
+import com.denisroyz.ringassignment.data.RedditDomainImpl;
 import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserPresenter;
 import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserPresenterContract;
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -105,6 +106,6 @@ public class AppModule {
     @Provides
     @Singleton
     RedditDomain redditDomain(RedditApi redditApi){
-        return new RedditDomain(redditApi);
+        return new RedditDomainImpl(redditApi);
     }
 }

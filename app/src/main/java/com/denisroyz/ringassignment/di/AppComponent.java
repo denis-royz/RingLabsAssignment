@@ -1,8 +1,6 @@
 package com.denisroyz.ringassignment.di;
 
-import com.denisroyz.ringassignment.data.RedditDomain;
 import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserActivity;
-import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserPresenter;
 import com.denisroyz.ringassignment.ui.redditBrowser.RedditBrowserView;
 
 import javax.inject.Singleton;
