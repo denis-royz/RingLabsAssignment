@@ -106,11 +106,20 @@ public class RedditBrowserView implements RedditBrowserViewContract{
     }
 
     @Override
-    public void notifyDownloadComplete(String title, String uri) {
+    public void notifyDownloadComplete(String title, String uri, String type) {
         String message = String.format(redditTopRecyclerView.getContext().getText(R.string.download_complete).toString(), title);
         Snackbar snackBar = Snackbar
                 .make(redditTopRecyclerView, message, Snackbar.LENGTH_SHORT);
-        snackBar.setAction("Show", v -> redditBrowserPresenter.showInGallery(uri));
+        snackBar.setAction("Show", v -> redditBrowserPresenter.showInGallery(uri, type));
+        snackBar.show();
+
+    }
+
+    @Override
+    public void requestWriteExternalStoragePermission() {
+        Snackbar snackBar = Snackbar
+                .make(redditTopRecyclerView, R.string.request_permission_storage, Snackbar.LENGTH_SHORT);
+        snackBar.setAction("Give permission", v -> redditBrowserPresenter.requestPermissionWriteExternalStorage());
         snackBar.show();
 
     }

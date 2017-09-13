@@ -13,5 +13,5 @@ import java.io.File;
 
 public interface DownloaderComponentListener {
 
-    void onDownloadComplete(String title, String uri);
+    void onDownloadComplete(String title, String uri, String type);
 }

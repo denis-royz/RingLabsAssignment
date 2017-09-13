@@ -6,5 +6,9 @@ package com.denisroyz.ringassignment.ui.redditBrowser;
 
 public interface RedditActivityContract {
 
-    void showInGallery(String url);
+    void showInGallery(String url, String type);
+
+    boolean haveWriteExternalStoragePermission();
+
+    void requestPermissionWriteExternalStorage();
 }

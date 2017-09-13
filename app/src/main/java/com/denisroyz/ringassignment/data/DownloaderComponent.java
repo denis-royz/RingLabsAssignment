@@ -87,18 +87,18 @@ public class DownloaderComponent {
         q.setFilterById(extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID));
         Cursor c = downloadManager.query(q);
         String title = null;
+        String type = null;
         String uri = null;
         if (c.moveToFirst()) {
             int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
             if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                // process download
                 uri = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                type = c.getString(c.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
                 title = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
-                // get other required data by changing the constant passed to getColumnIndex
             }
         }
         for (DownloaderComponentListener listener: listeners){
-            listener.onDownloadComplete(title, uri);
+            listener.onDownloadComplete(title, uri, type);
         }
 
     }

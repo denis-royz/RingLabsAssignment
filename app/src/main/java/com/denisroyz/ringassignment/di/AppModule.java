@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.denisroyz.ringassignment.RingAssignmentApplication;
 import com.denisroyz.ringassignment.data.DownloaderComponent;
+import com.denisroyz.ringassignment.data.PermissionManager;
 import com.denisroyz.ringassignment.data.RedditApi;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -80,9 +81,16 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     DownloaderComponent downloaderComponent(Context context){
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         return new DownloaderComponent(downloadManager, context);
 
+    }
+
+    @Provides
+    @Singleton
+    PermissionManager permissionManager(){
+        return new PermissionManager();
     }
 }

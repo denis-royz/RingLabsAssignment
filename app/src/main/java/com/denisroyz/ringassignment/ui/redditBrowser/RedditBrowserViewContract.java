@@ -30,5 +30,7 @@ public interface RedditBrowserViewContract {
 
     void notifyCanNotLoadFullSizeImage();
 
-    void notifyDownloadComplete(String title, String uri);
+    void notifyDownloadComplete(String title, String uri, String type);
+
+    void requestWriteExternalStoragePermission();
 }

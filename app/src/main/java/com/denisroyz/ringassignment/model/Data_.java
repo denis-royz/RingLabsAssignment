@@ -77,7 +77,7 @@ public class Data_ {
     private String subredditId;
     @SerializedName("edited")
     @Expose
-    private Boolean edited;
+    private Object edited;
     @SerializedName("link_flair_css_class")
     @Expose
     private Object linkFlairCssClass;
@@ -323,11 +323,11 @@ public class Data_ {
         this.subredditId = subredditId;
     }
 
-    public Boolean getEdited() {
+    public Object getEdited() {
         return edited;
     }
 
-    public void setEdited(Boolean edited) {
+    public void setEdited(Object edited) {
         this.edited = edited;
     }
 

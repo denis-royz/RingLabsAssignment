@@ -127,16 +127,20 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
     }
 
     @Override
-    public void showInGallery(String uri) {
+    public void showInGallery(String uri, String type) {
         if (!isAttached()){
             Log.i(TAG, "showInGallery.Rejected.Reason: State detached");
             return;
         }
-        redditActivityContract.showInGallery(uri);
+        redditActivityContract.showInGallery(uri, type);
     }
 
     @Override
     public void downloadFullSize(Child child) {
+        if (!redditActivityContract.haveWriteExternalStoragePermission()){
+            view.requestWriteExternalStoragePermission();
+            return;
+        }
         List<Image> images = child.getData().getPreview().getImages();
         String url = null;
         if (images.size()>0){
@@ -149,13 +153,25 @@ public class RedditBrowserPresenter implements RedditBrowserPresenterContract, D
         }
     }
 
+
+
     @Override
-    public void onDownloadComplete(String title, String uri) {
-        view.notifyDownloadComplete(title, uri);
+    public void onDownloadComplete(String title, String uri, String type) {
+        view.notifyDownloadComplete(title, uri, type);
 
     }
     @Override
     public void notifyDownloadComplete() {
+    }
+
+    @Override
+    public void requestPermissionWriteExternalStorage() {
+        redditActivityContract.requestPermissionWriteExternalStorage();
+    }
+
+    @Override
+    public void onPermissionWriteExternalStorageGranted() {
+
     }
 
     private boolean isAttached(){

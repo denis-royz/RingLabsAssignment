@@ -19,9 +19,13 @@ public interface RedditBrowserPresenterContract {
 
     void loadItemsToTail();
 
-    void showInGallery(String uri);
+    void showInGallery(String uri, String type);
 
     void downloadFullSize(Child child);
 
     void notifyDownloadComplete();
+
+    void requestPermissionWriteExternalStorage();
+
+    void onPermissionWriteExternalStorageGranted();
 }
